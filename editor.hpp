@@ -6,6 +6,7 @@
 #define HEIGHT_SCREEN 800
 #define FONT_SIZE 30
 #define CURSOR_COLOR GREEN
+#define SET_SCROLL 4
 
 
 enum MODE
@@ -21,6 +22,10 @@ private:
     std::vector<std::string> buffer{""};
     int y_actual{};
     int x_actual{};
+    int y_max{30}; //por ahora 30 lineas
+    int x_max{30};
+    int y_min{};
+    int x_min{};
 
     int letra{};
     int tecla{};
@@ -45,11 +50,14 @@ public:
         BeginDrawing();
         ClearBackground(BLACK);
         float distanciaEntreFilas{};
-        for (size_t i{};i<buffer.size();i++)
+        for (size_t fila{};fila<buffer.size();fila++)
         {
-            Vector2 posicion = { 0, distanciaEntreFilas };
-            DrawTextEx(jetbrainsFont,buffer[i].c_str(), posicion, FONT_SIZE,0, WHITE);
-            distanciaEntreFilas+=FONT_SIZE;
+            if (fila+y_min<buffer.size())
+            {
+                Vector2 posicion = { 0, distanciaEntreFilas };
+                DrawTextEx(jetbrainsFont,buffer[fila+y_min].c_str(), posicion, FONT_SIZE,0, WHITE);
+                distanciaEntreFilas+=FONT_SIZE;
+            }
         }
         if (textura.id>0)
         {
@@ -70,6 +78,11 @@ public:
     {
         if (tecla == KEY_ENTER)
         {
+            if (y_actual>=y_max+y_min-5) 
+            {
+                y_min+=1;
+            }
+
             if (x_actual == buffer[y_actual].size())
             {
                 y_actual+=1;
@@ -106,10 +119,21 @@ public:
         if (letra == 'j' && y_actual+1 < buffer.size())
         {
             y_actual+=1;
+            if (y_actual>=y_max+y_min-SET_SCROLL*2) 
+            {
+                y_min+=1;
+            }
         }
         else if (letra == 'k' && y_actual>0)
         {
             y_actual-=1;
+            if (y_actual < y_min+SET_SCROLL) 
+            {
+                if (y_actual>1) 
+                {
+                    y_min-=1;
+                }
+            }
         }
     }
 
