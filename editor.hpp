@@ -44,10 +44,11 @@ public:
     {
         BeginDrawing();
         ClearBackground(BLACK);
-        int distanciaEntreFilas{};
+        float distanciaEntreFilas{};
         for (size_t i{};i<buffer.size();i++)
         {
-            DrawText(buffer[i].c_str(), 0, distanciaEntreFilas, FONT_SIZE, WHITE);
+            Vector2 posicion = { 0, distanciaEntreFilas };
+            DrawTextEx(jetbrainsFont,buffer[i].c_str(), posicion, FONT_SIZE,0, WHITE);
             distanciaEntreFilas+=FONT_SIZE;
         }
         if (textura.id>0)
@@ -86,8 +87,16 @@ public:
         }
         else
         {
-            buffer[y_actual].push_back(letra);
-            x_actual+=1; //luego cuando agregue backspace toquetear
+            if (x_actual<buffer[y_actual].size())
+            {
+                buffer[y_actual].insert(x_actual,1,letra);
+                x_actual+=1; //luego cuando agregue backspace toquetear
+            }
+            else
+            {
+                buffer[y_actual].push_back(letra);
+                x_actual+=1; //luego cuando agregue backspace toquetear
+            }
         }
     }
 
