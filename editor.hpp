@@ -129,12 +129,12 @@ public:
             if (x_actual<buffer[y_actual].size())
             {
                 buffer[y_actual].insert(x_actual,1,letra);
-                x_actual+=1; //luego cuando agregue backspace toquetear
+                x_actual+=1;
             }
             else
             {
                 buffer[y_actual].push_back(letra);
-                x_actual+=1; //luego cuando agregue backspace toquetear
+                x_actual+=1;
             }
         }
     }
