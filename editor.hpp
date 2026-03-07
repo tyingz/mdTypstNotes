@@ -1,10 +1,12 @@
 #include "raylib.h"
 #include <string>
 #include <vector>
+#include <unordered_set>
+#include <unordered_map>
 
 #define WIDTH_SCREEN 1200
 #define HEIGHT_SCREEN 800
-#define FONT_SIZE 30
+#define FONT_SIZE 50
 #define CURSOR_COLOR GREEN
 #define SET_SCROLL 4
 
@@ -20,12 +22,14 @@ class Editor
 {
 private:
     std::vector<std::string> buffer{""};
-    int y_actual{};
-    int x_actual{};
-    int y_max{30}; //por ahora 30 lineas
-    int x_max{30};
-    int y_min{};
-    int x_min{};
+    float y_actual{};
+    float x_actual{};
+
+    float y_max{HEIGHT_SCREEN/FONT_SIZE-1}; //idem abajo
+    float x_max{WIDTH_SCREEN/FONT_SIZE}; //chequear si va float
+
+    float y_min{};
+    float x_min{};
 
     int letra{};
     int tecla{};
@@ -37,12 +41,18 @@ private:
 
     Font jetbrainsFont; 
 
+    std::unordered_set<int> setInsertRareKeys
+    {
+        KEY_ENTER,
+        KEY_BACKSPACE,
+    };
+
 public:
 
     void renderCursor()
     {
         Vector2 size = MeasureTextEx(jetbrainsFont, "A", FONT_SIZE, 0);
-        DrawRectangle(x_actual * size.x, y_actual * size.y, size.x, size.y, Fade(CURSOR_COLOR, 0.5f));
+        DrawRectangle(x_actual * size.x, (y_actual-y_min)* size.y, size.x, size.y, Fade(CURSOR_COLOR, 0.5f));
     }
 
     void renderScreen()
@@ -74,11 +84,11 @@ public:
         areaRecorte = { 0.0f, 100.0f, (float)textura.width, 100.0f};
     }
 
-    void handleInsertMode()
+    void handleInsertRareKeys()
     {
         if (tecla == KEY_ENTER)
         {
-            if (y_actual>=y_max+y_min-5) 
+            if (y_actual>=y_max+y_min) 
             {
                 y_min+=1;
             }
@@ -97,6 +107,22 @@ public:
                 x_actual =0;
                 buffer.insert(buffer.begin() + y_actual,temp);
             }
+        }
+        else if (tecla == KEY_BACKSPACE)
+        {
+            if (x_actual>0 && buffer[y_actual].size()>=x_actual)
+            {
+                x_actual-=1;
+                buffer[y_actual].erase(x_actual,1);
+            }
+        }
+    }
+
+    void handleInsertMode()
+    {
+        if (setInsertRareKeys.find(tecla)!=setInsertRareKeys.end())
+        {
+            handleInsertRareKeys();
         }
         else
         {
@@ -119,7 +145,7 @@ public:
         if (letra == 'j' && y_actual+1 < buffer.size())
         {
             y_actual+=1;
-            if (y_actual>=y_max+y_min-SET_SCROLL*2) 
+            if (y_actual>y_max+y_min) 
             {
                 y_min+=1;
             }
@@ -127,14 +153,18 @@ public:
         else if (letra == 'k' && y_actual>0)
         {
             y_actual-=1;
-            if (y_actual < y_min+SET_SCROLL) 
+            if (y_actual < y_min && y_min>0) 
             {
-                if (y_actual>1) 
-                {
-                    y_min-=1;
-                }
+                y_min-=1;
             }
         }
+
+        if (x_actual>buffer[y_actual].size())
+        {
+            x_actual = buffer[y_actual].size();
+        }
+
+
     }
 
     void handleXNavegation()
