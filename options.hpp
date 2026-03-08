@@ -1,0 +1,5 @@
+#define WIDTH_SCREEN 1200
+#define HEIGHT_SCREEN 800
+#define FONT_SIZE 50
+#define CURSOR_COLOR GREEN
+#define SET_SCROLL 4

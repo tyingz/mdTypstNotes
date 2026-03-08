@@ -1,15 +1,4 @@
-#include "raylib.h"
-#include <string>
-#include <vector>
-#include <unordered_set>
-#include <unordered_map>
-
-#define WIDTH_SCREEN 1200
-#define HEIGHT_SCREEN 800
-#define FONT_SIZE 50
-#define CURSOR_COLOR GREEN
-#define SET_SCROLL 4
-
+#include "reader.hpp"
 
 enum MODE
 {
@@ -41,6 +30,9 @@ private:
 
     Font jetbrainsFont; 
 
+    Reader read{};
+    std::vector<TypstBlock> bloques{};
+    std::unordered_map<size_t,Texture2D> texturaGuardada{};
     std::unordered_set<int> setInsertRareKeys
     {
         KEY_ENTER,
@@ -55,12 +47,29 @@ public:
         DrawRectangle(x_actual * size.x, (y_actual-y_min)* size.y, size.x, size.y, Fade(CURSOR_COLOR, 0.5f));
     }
 
+    void renderEcuaciones()
+    {
+        //la idea es que tape las ecs. a menos que pase el cursor por arriba?
+        //aun nose como no renderizar si esta arriba mi cursor asi que
+        //voy a renderizar siempre que este en normal mode y luego
+        //agrego ese feature
+        for (auto &bloque : bloques)
+        {
+            bool cursorEncima = (y_actual >= bloque.inicioFila && y_actual <= bloque.finalFila);
+            if (texturaGuardada.count(bloque.id) && !cursorEncima)
+            {
+                Texture2D texturaEcuacion=texturaGuardada[bloque.id];
+                DrawTexture(texturaEcuacion,x_min,(bloque.inicioFila-y_min)*FONT_SIZE,WHITE);
+            }
+        }
+    }
+
     void renderScreen()
     {
         BeginDrawing();
         ClearBackground(BLACK);
         float distanciaEntreFilas{};
-        for (size_t fila{};fila<buffer.size();fila++)
+        for (size_t fila{};fila<=y_max;fila++)
         {
             if (fila+y_min<buffer.size())
             {
@@ -69,19 +78,39 @@ public:
                 distanciaEntreFilas+=FONT_SIZE;
             }
         }
-        if (textura.id>0)
+        if (mode == MODE::Normal)
         {
-            DrawTextureRec(textura, areaRecorte, posicionDestino, WHITE);
+            renderEcuaciones();
         }
         renderCursor();
         EndDrawing();
     }
 
-    void actualizarRenderizado()
+    void actualizarTexturas()
     {
-        UnloadTexture(textura); 
-        textura = LoadTexture("./temp/1.png"); 
-        areaRecorte = { 0.0f, 100.0f, (float)textura.width, 100.0f};
+        bloques = read.parser(buffer,y_min,y_max);
+        for (auto &val : bloques)
+        {
+            std::string locationImage{};
+            locationImage.append("./temp/formula");
+            locationImage.append(std::to_string(val.id));
+            locationImage.append(".png");
+
+            val.flag = true;
+            if (texturaGuardada.find(val.id)==texturaGuardada.end())
+            {
+                if (fs::exists(locationImage))
+                {
+                    Image img = LoadImage(locationImage.c_str());
+                    texturaGuardada[val.id] = LoadTextureFromImage(img);
+                    UnloadImage(img); 
+                    //solamente si no existe en el mapa pero si en mi pc
+                }
+            }
+        }
+        //guardo las texturas en el mapa y ahora cuando entre en normal mode
+        //tengo que renderizarlas.
+        //asi que esta funcion se va a llamar cuando se entre en normal mode
     }
 
     void handleInsertRareKeys()
@@ -138,7 +167,6 @@ public:
             }
         }
     }
-
 
     void handleYNavegation()
     {
@@ -206,16 +234,17 @@ public:
 
         SetTargetFPS(60); 
         SetExitKey(0); 
-        // actualizarRenderizado();
+        // actualizarTexturas();
         while (!WindowShouldClose()) {
-            letra = GetCharPressed();
             tecla = GetKeyPressed();
+            letra = GetCharPressed();
             if (letra || tecla)
             {
                 if (mode == MODE::Insert)
                 {
                     if (tecla == KEY_ESCAPE)
                     {
+                        actualizarTexturas();
                         mode = MODE::Normal;
                     }
                     else
