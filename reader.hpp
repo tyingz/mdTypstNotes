@@ -32,12 +32,17 @@ class Reader
 {
 private:
     size_t m_id{};
-    std::string configsTypstTopFile{"#set page(width: auto, height: auto, margin: 5pt)\n"};
+    // std::string configsTypstTopFile{"#set page(width: auto, height: auto, margin: 5pt)\n"};
+    std::string configsTypstTopFile{"#set page(width: 1000pt, height: 35pt, margin: 5pt)\n#show math.equation.where(block: true): align.with(left)\n"};
+    //TODO Dejar de hardcodear height y width ya que son sensibles a FONT_SIZE y sreenwidth
+    //TODO Dejar de hardcodear height y width ya que son sensibles a FONT_SIZE y sreenwidth
+    //TODO Dejar de hardcodear height y width ya que son sensibles a FONT_SIZE y sreenwidth
+    //TODO Dejar de hardcodear height y width ya que son sensibles a FONT_SIZE y sreenwidth
+    //El auto no me gusta xq quiero que sea larga la ec renderizada.
 public:
     std::vector<TypstBlock> parser(const std::vector<std::string> &buffer,size_t y_min,
             size_t y_max)
     {
-
         std::vector<TypstBlock> vectorTypstBlock{};
         size_t tempInicio{};
         size_t tempFinal{};
