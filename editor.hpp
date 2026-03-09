@@ -132,7 +132,7 @@ public:
             {
                 buffer[y_actual].push_back('\n');
                 y_actual+=1;
-                x_actual =0;
+                x_actual =x_min;
                 buffer.insert(buffer.begin() + y_actual,"");
             }
             else
@@ -141,13 +141,13 @@ public:
                 buffer[y_actual].erase(x_actual);
                 buffer[y_actual].push_back('\n');
                 y_actual+=1;
-                x_actual =0;
+                x_actual =x_min;
                 buffer.insert(buffer.begin() + y_actual,temp);
             }
         }
         else if (tecla == KEY_BACKSPACE)
         {
-            if (x_actual>0 && buffer[y_actual].size()>=x_actual)
+            if (x_actual>x_min && buffer[y_actual].size()>=x_actual)
             {
                 x_actual-=1;
                 buffer[y_actual].erase(x_actual,1);
@@ -190,7 +190,7 @@ public:
 
         if (x_actual>buffer[y_actual].size())
         {
-            x_actual = buffer[y_actual].size();
+            x_actual = buffer[y_actual].size()-1;
         }
 
 
@@ -198,12 +198,14 @@ public:
 
     void handleXNavegation()
     {
-        if (letra == 'h' && x_actual>0)
+        if (letra == 'h' && x_actual>x_min)
         {
             x_actual-=1;
         }
         else if (letra == 'l' && x_actual<buffer[y_actual].length())
         {
+            //hay un bug con el l o con el buffer cuando se presiona
+            //muy rapido aun nose que es bien.
             x_actual+=1;
         }
     }

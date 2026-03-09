@@ -3,5 +3,5 @@
 #set page(fill: black)
 #set text(fill: white)
 $
-integral_0^10 frac(dif x, dif t) d t
+1/2+1
 $
