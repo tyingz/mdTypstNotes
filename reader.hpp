@@ -33,7 +33,7 @@ class Reader
 private:
     size_t m_id{};
     // std::string configsTypstTopFile{"#set page(width: auto, height: auto, margin: 5pt)\n"};
-    std::string configsTypstTopFile{"#set page(width: 1000pt, height: 35pt, margin: 5pt)\n#show math.equation.where(block: true): align.with(left)\n"};
+    std::string configsTypstTopFile{"#set page(width: 1000pt, height: 35pt, margin: 5pt)\n#show math.equation.where(block: true): align.with(left)\n#set page(fill: black)\n#set text(fill: white)\n"};
     //TODO Dejar de hardcodear height y width ya que son sensibles a FONT_SIZE y sreenwidth
     //TODO Dejar de hardcodear height y width ya que son sensibles a FONT_SIZE y sreenwidth
     //TODO Dejar de hardcodear height y width ya que son sensibles a FONT_SIZE y sreenwidth
