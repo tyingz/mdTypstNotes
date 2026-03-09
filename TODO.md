@@ -8,4 +8,5 @@ que te caga la edicion simplemente renderizar un mensaje que diga
 3. Tambien agregar para renderizar ecuaciones tipo $ $ ya que solo ahora
 agarra de tipo $\n $ nose si me explico..
 4. Limpiar temp cuando cierro.
-
+5. Hay un bug al matener l apretado que te deja salir del buffer
+y comenzas a escribir en el de abajo.
