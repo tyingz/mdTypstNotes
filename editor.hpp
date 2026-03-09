@@ -39,7 +39,6 @@ private:
         KEY_ENTER,
         KEY_BACKSPACE,
     };
-
 public:
 
     void renderCursor()
@@ -130,7 +129,6 @@ public:
 
             if (x_actual == buffer[y_actual].size())
             {
-                buffer[y_actual].push_back('\n');
                 y_actual+=1;
                 x_actual =x_min;
                 buffer.insert(buffer.begin() + y_actual,"");
@@ -139,7 +137,6 @@ public:
             {
                 std::string temp = buffer[y_actual].substr(x_actual);
                 buffer[y_actual].erase(x_actual);
-                buffer[y_actual].push_back('\n');
                 y_actual+=1;
                 x_actual =x_min;
                 buffer.insert(buffer.begin() + y_actual,temp);
@@ -204,8 +201,6 @@ public:
         }
         else if (letra == 'l' && x_actual<buffer[y_actual].length())
         {
-            //hay un bug con el l o con el buffer cuando se presiona
-            //muy rapido aun nose que es bien.
             x_actual+=1;
         }
     }
