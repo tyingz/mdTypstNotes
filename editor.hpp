@@ -35,6 +35,7 @@ private:
     std::unordered_map<size_t,Texture2D> texturaGuardada{};
     std::unordered_set<int> setInsertRareKeys
     {
+        KEY_ESCAPE,
         KEY_ENTER,
         KEY_BACKSPACE,
     };
@@ -115,7 +116,12 @@ public:
 
     void handleInsertRareKeys()
     {
-        if (tecla == KEY_ENTER)
+        if (tecla == KEY_ESCAPE)
+        {
+            actualizarTexturas();
+            mode = MODE::Normal;
+        }
+        else if (tecla == KEY_ENTER)
         {
             if (y_actual>=y_max+y_min) 
             {
@@ -124,6 +130,7 @@ public:
 
             if (x_actual == buffer[y_actual].size())
             {
+                buffer[y_actual].push_back('\n');
                 y_actual+=1;
                 x_actual =0;
                 buffer.insert(buffer.begin() + y_actual,"");
@@ -132,6 +139,7 @@ public:
             {
                 std::string temp = buffer[y_actual].substr(x_actual);
                 buffer[y_actual].erase(x_actual);
+                buffer[y_actual].push_back('\n');
                 y_actual+=1;
                 x_actual =0;
                 buffer.insert(buffer.begin() + y_actual,temp);
@@ -149,22 +157,15 @@ public:
 
     void handleInsertMode()
     {
-        if (setInsertRareKeys.find(tecla)!=setInsertRareKeys.end())
+        if (x_actual<buffer[y_actual].size())
         {
-            handleInsertRareKeys();
+            buffer[y_actual].insert(x_actual,1,letra);
+            x_actual+=1;
         }
         else
         {
-            if (x_actual<buffer[y_actual].size())
-            {
-                buffer[y_actual].insert(x_actual,1,letra);
-                x_actual+=1;
-            }
-            else
-            {
-                buffer[y_actual].push_back(letra);
-                x_actual+=1;
-            }
+            buffer[y_actual].push_back(letra);
+            x_actual+=1;
         }
     }
 
@@ -209,7 +210,11 @@ public:
 
     void handleNormalMode()
     {
-        if (letra == 'j' || letra == 'k')
+        if (letra == 'i')
+        {
+            mode = MODE::Insert;
+        }
+        else if (letra == 'j' || letra == 'k')
         {
             handleYNavegation();
         }
@@ -236,36 +241,46 @@ public:
         SetExitKey(0); 
         // actualizarTexturas();
         while (!WindowShouldClose()) {
-            tecla = GetKeyPressed();
             letra = GetCharPressed();
-            if (letra || tecla)
+
+            if (letra>0)
             {
                 if (mode == MODE::Insert)
                 {
-                    if (tecla == KEY_ESCAPE)
+                    handleInsertMode();
+                }
+                else if (mode == MODE::Normal)
+                {
+                    handleNormalMode();
+                }
+                else if (mode == MODE::Command)
+                {
+                    handleCommandMode();
+                }
+            }
+
+            tecla = GetKeyPressed();
+            if (tecla>0)
+            {
+                if (mode == MODE::Insert)
+                {
+                    if (setInsertRareKeys.find(tecla)!=setInsertRareKeys.end())
                     {
-                        actualizarTexturas();
-                        mode = MODE::Normal;
-                    }
-                    else
-                    {
-                        handleInsertMode();
+                        handleInsertRareKeys();
                     }
                 }
                 else if (mode == MODE::Normal)
                 {
-                    if (letra == 'i')
-                    {
-                        mode = MODE::Insert;
-                    }
-                    else
-                    {
-                        handleNormalMode();
-                    }
+                    //aun no agregue ctrl u y esas cosas asiq da igual
+                    // handleNormalMode();
+                    // quizas deba hacer un handleNormal unico para
+                    // teclas especificas estilo el de arriba
                 }
                 else if(mode == MODE::Command)
                 {
-                    handleCommandMode();
+                    //ni lo agregue todavia capaz ni va est
+                    //en esta parte ya que : lo handlea letra
+                    // handleCommandMode();
                 }
             }
             //parsear la screen hasta encontrar $$ y ahi quitar esa linea y compilar

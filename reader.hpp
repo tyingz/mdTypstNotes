@@ -32,6 +32,7 @@ class Reader
 {
 private:
     size_t m_id{};
+    std::string configsTypstTopFile{"#set page(width: auto, height: auto, margin: 5pt)\n"};
 public:
     std::vector<TypstBlock> parser(const std::vector<std::string> &buffer,size_t y_min,
             size_t y_max)
@@ -45,7 +46,7 @@ public:
         bool reading{false};
         for (size_t fila{y_min};fila<std::min(buffer.size(),y_min+y_max);fila++)
         {
-            if (buffer[fila].find("$$")!=std::string::npos)
+            if (buffer[fila].find("$")!=std::string::npos)
             {
                 if (reading == true)
                 {
@@ -72,7 +73,7 @@ public:
                     locationFile.append(".typ");
 
                     std::ofstream file {locationFile};
-                    file << "#set page(width: auto, height: auto, margin: 5pt)\n";
+                    file << configsTypstTopFile;
                     file << bufferEquation;
                     file.close();
 
