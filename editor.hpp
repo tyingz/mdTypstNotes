@@ -54,8 +54,10 @@ public:
             bool cursorEncima = (y_actual >= bloque.inicioFila && y_actual <= bloque.finalFila);
             if (texturaGuardada.count(bloque.id) && !cursorEncima)
             {
+                //al final la mejor opcion al menos por ahora es renderizar un cuadrado abajo
+                DrawRectangle(x_min*FONT_SIZE,(bloque.inicioFila-y_min)*FONT_SIZE,bloque.areaEcuation.width,bloque.areaEcuation.height+FONT_SIZE,BLACK);
                 Texture2D texturaEcuacion=texturaGuardada[bloque.id];
-                DrawTexture(texturaEcuacion,x_min,(bloque.inicioFila-y_min)*FONT_SIZE,WHITE);
+                DrawTexture(texturaEcuacion,x_min*FONT_SIZE,(bloque.inicioFila-y_min)*FONT_SIZE,WHITE);
             }
         }
     }
