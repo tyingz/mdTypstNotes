@@ -49,10 +49,6 @@ public:
 
     void renderEcuaciones()
     {
-        //la idea es que tape las ecs. a menos que pase el cursor por arriba?
-        //aun nose como no renderizar si esta arriba mi cursor asi que
-        //voy a renderizar siempre que este en normal mode y luego
-        //agrego ese feature
         for (auto &bloque : bloques)
         {
             bool cursorEncima = (y_actual >= bloque.inicioFila && y_actual <= bloque.finalFila);
@@ -88,7 +84,7 @@ public:
 
     void actualizarTexturas()
     {
-        bloques = read.parser(buffer,y_min,y_max);
+        bloques = read.parser(buffer,y_min,y_max,x_min,x_max);
         for (auto &val : bloques)
         {
             std::string locationImage{};
@@ -236,7 +232,6 @@ public:
 
         SetTargetFPS(60); 
         SetExitKey(0); 
-        // actualizarTexturas();
         while (!WindowShouldClose()) {
             letra = GetCharPressed();
 
