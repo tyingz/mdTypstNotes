@@ -24,10 +24,6 @@ private:
     int tecla{};
     MODE mode{Normal};
 
-    Texture2D textura {};
-    Rectangle areaRecorte {};
-    Vector2 posicionDestino = { 20, 20 };
-
     Font jetbrainsFont; 
 
     Reader read{};
