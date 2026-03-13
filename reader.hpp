@@ -93,7 +93,9 @@ public:
                         }
                         else
                         {
-                            throw std::logic_error("NO LOADEO LA IMAGEN BIEN.");
+                            // throw std::logic_error("NO LOADEO LA IMAGEN BIEN.");
+                            // capaz luego poner alguna textura para que
+                            // se de cuenta que la cago
                         }
                     }
                     else
