@@ -11,14 +11,14 @@ class Editor
 {
 private:
     std::vector<std::string> buffer{""};
-    float y_actual{};
-    float x_actual{};
-
-    float y_max{HEIGHT_SCREEN/FONT_SIZE-1}; //idem abajo
-    float x_max{WIDTH_SCREEN/FONT_SIZE}; //chequear si va float
-
     float y_min{};
     float x_min{};
+
+    float y_actual{y_min};
+    float x_actual{x_min};
+
+    float y_max{HEIGHT_SCREEN/FONT_SIZE-1-2}; //idem abajo
+    float x_max{WIDTH_SCREEN/FONT_SIZE}; //chequear si va float
 
     int letra{};
     int tecla{};
@@ -43,8 +43,8 @@ public:
 
     void renderCursor()
     {
-        Vector2 size = MeasureTextEx(jetbrainsFont, "A", FONT_SIZE, 0);
-        DrawRectangle(x_actual * size.x, (y_actual-y_min)* size.y, size.x, size.y, Fade(CURSOR_COLOR, 0.5f));
+        Vector2 sizeText = MeasureTextEx(jetbrainsFont, "A", FONT_SIZE, 0);
+        DrawRectangle(x_actual * sizeText.x, (y_actual-y_min)* sizeText.y, sizeText.x, sizeText.y, Fade(CURSOR_COLOR, 0.5f));
     }
 
     void renderEcuaciones()
@@ -80,8 +80,25 @@ public:
         {
             renderEcuaciones();
         }
+        renderStatusBar();
         renderCursor();
         EndDrawing();
+    }
+
+    void renderStatusBar()
+    {
+        Vector2 sizeText = MeasureTextEx(jetbrainsFont, "A", FONT_SIZE, 0);
+        DrawRectangle(x_min*sizeText.x, (y_max+1)* sizeText.y, WIDTH_SCREEN, HEIGHT_SCREEN, BLACK);
+        DrawRectangle(x_min*sizeText.x, (y_max+2)* sizeText.y, WIDTH_SCREEN, HEIGHT_SCREEN, BROWN);
+        Vector2 posicion = { x_min*sizeText.x, (y_max+2)* sizeText.y };
+        if (mode==MODE::Normal)
+        {
+            DrawTextEx(jetbrainsFont,"--NORMAL--",posicion,FONT_SIZE,0,WHITE);
+        }
+        else if (mode==MODE::Insert)
+        {
+            DrawTextEx(jetbrainsFont,"--INSERT--",posicion,FONT_SIZE,0,WHITE);
+        }
     }
 
     void actualizarTexturas()
@@ -182,11 +199,22 @@ public:
                 y_min-=1;
             }
         }
-
-        if (x_actual>buffer[y_actual].size())
+        if (buffer[y_actual].empty())
         {
-            x_actual = buffer[y_actual].size()-1;
+            x_actual=x_min;
         }
+        else
+        {
+            if (x_actual>=buffer[y_actual].size())
+            {
+                x_actual = buffer[y_actual].size()-1;
+                if (x_actual<x_min)
+                {
+                    x_actual=x_min;
+                }
+            }
+        }
+
 
 
     }
