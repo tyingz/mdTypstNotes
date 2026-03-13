@@ -109,9 +109,20 @@ public:
                 }
                 else
                 {
-                    tempInicio = fila;
-                    bufferEquation.append(buffer[fila]);
-                    reading = true;
+                    //aca chequeemos que no haya 2 es decir $ $
+                    auto primero = buffer[fila].find("$");
+                    if (buffer[fila].find("$",primero+1)!=std::string::npos)
+                    {
+                        //REORDENAR EL CODIGO PARA REUTILIZAR LA CREACION DE CODIGO
+                        //DE ARRIBA PARA EL STRING QUE SE FORMA ENTRE MEDIO DE LOS DOS
+                        //$ STRING $...
+                    }
+                    else
+                    {
+                        tempInicio = fila;
+                        bufferEquation.append(buffer[fila]);
+                        reading = true;
+                    }
                 }
             }
             else
