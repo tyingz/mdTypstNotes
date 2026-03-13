@@ -253,12 +253,32 @@ public:
 
     }
 
+    void clearCache()
+    {
+        std::string locationFile = "./temp/";
+        if (fs::exists(locationFile))
+        {
+            fs::remove_all(locationFile);
+            fs::create_directory("./temp/");
+        }
+    }
+
+    void createCache()
+    {
+        std::string locationFile = "./temp/";
+        if (!fs::exists(locationFile))
+        {
+            fs::create_directory("./temp/");
+        }
+    }
+
     void general()
     {
         InitWindow(WIDTH_SCREEN, HEIGHT_SCREEN, "TYM_TYP");
 
         jetbrainsFont = LoadFontEx("resources/JetBrainsMono-Medium.ttf", FONT_SIZE , NULL, 0);
         SetTextureFilter(jetbrainsFont.texture, TEXTURE_FILTER_BILINEAR);
+        createCache();
 
         SetTargetFPS(60); 
         SetExitKey(0); 
@@ -311,6 +331,7 @@ public:
         }
         UnloadTexture(textura);
         UnloadFont(jetbrainsFont);
+        clearCache();
         CloseWindow();
     }
 
