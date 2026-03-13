@@ -39,6 +39,8 @@ private:
         KEY_ENTER,
         KEY_BACKSPACE,
     };
+
+    std::string bufferCommand{};
 public:
 
     void renderCursor()
@@ -99,6 +101,8 @@ public:
         {
             DrawTextEx(jetbrainsFont,"--INSERT--",posicion,FONT_SIZE,0,WHITE);
         }
+        Vector2 posicionText = { x_min*sizeText.x, (y_max+1)* sizeText.y };
+        DrawTextEx(jetbrainsFont,bufferCommand.c_str(),posicionText,FONT_SIZE,0,WHITE);
     }
 
     void actualizarTexturas()
@@ -237,6 +241,10 @@ public:
         {
             mode = MODE::Insert;
         }
+        if (letra == ':')
+        {
+            mode = MODE::Command;
+        }
         else if (letra == 'j' || letra == 'k')
         {
             handleYNavegation();
@@ -248,9 +256,78 @@ public:
         return;
     }
 
-    void handleCommandMode()
+    void handleCommandTypes()
     {
+        if (bufferCommand == ":w")
+        {
+            // ya funciona ahora a divertirse con esto..
+        }
+    }
 
+    void handleCommandMode(int firstLetra)
+    {
+        float x_saved{x_actual};
+        float y_saved{y_actual};
+
+        Vector2 sizeText = MeasureTextEx(jetbrainsFont, "A", FONT_SIZE, 0);
+        Vector2 posicion = { (x_min)*sizeText.x, (y_max+1)* sizeText.y };
+        x_actual = posicion.x;
+        y_actual = posicion.y;
+
+        bufferCommand.push_back(':');
+        renderScreen();
+        // x_actual+=1; creo que es lo mejor que no me deje borrar :
+        // o puedo poner algo para que brekee cuando borro ":"
+        // TODO por ahora lo trickeo asi asi cree que x_min esta 1 mas
+        // y el backspace no lo deja borrarlo.
+        bufferCommand.push_back(firstLetra);
+        renderScreen();
+        x_actual+=1;
+
+        while (!WindowShouldClose()) 
+        {
+            int letraCommand = GetCharPressed();
+            if(letraCommand>0)
+            {
+                bufferCommand.push_back(letraCommand);
+                x_actual+=1;
+            }
+            int keyCommand = GetKeyPressed();
+            if(keyCommand>0)
+            {
+                if (keyCommand == KEY_ESCAPE)
+                {
+                    x_actual=x_saved;
+                    y_actual=y_saved;
+                    actualizarTexturas();
+                    mode = MODE::Normal;
+                    bufferCommand.clear();
+                    break;
+                }
+                else if (keyCommand == KEY_ENTER)
+                {
+                    handleCommandTypes();
+
+                    x_actual=x_saved;
+                    y_actual=y_saved;
+                    actualizarTexturas();
+                    mode = MODE::Normal;
+                    bufferCommand.clear();
+                    break;
+                }
+                else if (keyCommand == KEY_BACKSPACE)
+                {
+                    if (x_actual>x_min && bufferCommand.size()>=x_actual)
+                    {
+                        x_actual-=1;
+                        bufferCommand.pop_back();
+                        //popbackeo ya que aun ni agregue flechitas
+                        //ni tampoco pienso agregar creo
+                    }
+                }
+            }
+            renderScreen();
+        }
     }
 
     void clearCache()
@@ -282,7 +359,8 @@ public:
 
         SetTargetFPS(60); 
         SetExitKey(0); 
-        while (!WindowShouldClose()) {
+        while (!WindowShouldClose()) 
+        {
             letra = GetCharPressed();
 
             if (letra>0)
@@ -297,7 +375,7 @@ public:
                 }
                 else if (mode == MODE::Command)
                 {
-                    handleCommandMode();
+                    handleCommandMode(letra);
                 }
             }
 
