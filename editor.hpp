@@ -41,7 +41,14 @@ private:
     };
 
     std::string bufferCommand{};
+
+    std::string fileName{};
+    std::ifstream file{};
+    bool salir{false};
 public:
+    Editor(std::string file_name)
+    :fileName{file_name}
+    {}
 
     void renderCursor()
     {
@@ -258,9 +265,30 @@ public:
 
     void handleCommandTypes()
     {
-        if (bufferCommand == ":w")
+        if (bufferCommand == ":q")
         {
-            // ya funciona ahora a divertirse con esto..
+            file.close();
+            salir = true;
+        }
+        else if (bufferCommand == ":wq")
+        {
+            std::ofstream outFile (fileName, std::ios::trunc);
+            for (auto &lineas : buffer)
+            {
+                outFile<<lineas<<'\n';
+            }
+            outFile.close();
+            file.close();
+            salir = true;
+        }
+        else if (bufferCommand == ":w")
+        {
+            std::ofstream outFile (fileName, std::ios::trunc);
+            for (auto &lineas : buffer)
+            {
+                outFile<<lineas<<'\n';
+            }
+            outFile.close();
         }
     }
 
@@ -349,6 +377,24 @@ public:
         }
     }
 
+    void readFileToBuffer()
+    {
+        file.open(fileName);
+        if (file.is_open())
+        {
+            std::string bufferLine{};
+            while (std::getline(file,bufferLine))
+            {
+                buffer.push_back(bufferLine);
+            }
+        }
+        else
+        {
+            CloseWindow();
+            std::logic_error("File no se pudo abrir.");
+        }
+    }
+
     void general()
     {
         InitWindow(WIDTH_SCREEN, HEIGHT_SCREEN, "TYM_TYP");
@@ -356,6 +402,8 @@ public:
         jetbrainsFont = LoadFontEx("resources/JetBrainsMono-Medium.ttf", FONT_SIZE , NULL, 0);
         SetTextureFilter(jetbrainsFont.texture, TEXTURE_FILTER_BILINEAR);
         createCache();
+
+        readFileToBuffer();
 
         SetTargetFPS(60); 
         SetExitKey(0); 
@@ -376,6 +424,10 @@ public:
                 else if (mode == MODE::Command)
                 {
                     handleCommandMode(letra);
+                    if (salir == true)
+                    {
+                        break;
+                    }
                 }
             }
 
