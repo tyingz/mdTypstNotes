@@ -1,17 +1,9 @@
 
-ejjee
-holahojjo pedazito
+testeo
 $
-L = T-V+1
+L = T-V
 $
 $
 frac(dif x, dif T) = 0
 $
 
-
-hohooojojojo
-hola
-hola
-
-
-pepito
