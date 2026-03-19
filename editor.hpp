@@ -146,6 +146,10 @@ public:
     {
         if (tecla == KEY_ESCAPE)
         {
+            if (x_actual==buffer[y_actual].size() && x_actual>0)
+            {
+                x_actual-=1;
+            }
             actualizarTexturas();
             mode = MODE::Normal;
         }
@@ -244,7 +248,7 @@ public:
         {
             x_actual-=1;
         }
-        else if (letra == 'l' && x_actual<buffer[y_actual].length())
+        else if (letra == 'l' && x_actual<buffer[y_actual].length()-1)
         {
             x_actual+=1;
         }
@@ -258,7 +262,7 @@ public:
         }
         else if (letra == 'a')
         {
-            if (x_actual+1<x_max)
+            if (x_actual+1<=buffer[y_actual].size())
             {
                 x_actual+=1;
             }
@@ -433,6 +437,10 @@ public:
                     {
                         buffer[y_actual].erase(x_actual-1,1);
                         x_actual-=1;
+                        if (x_actual==buffer[y_actual].size() && x_actual>0)
+                        {
+                            x_actual-=1;
+                        }
                         mode=MODE::Normal;
                         letraJ=false;
                     }
