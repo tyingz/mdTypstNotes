@@ -267,7 +267,6 @@ public:
     {
         if (bufferCommand == ":q")
         {
-            file.close();
             salir = true;
         }
         else if (bufferCommand == ":wq")
@@ -278,7 +277,6 @@ public:
                 outFile<<lineas<<'\n';
             }
             outFile.close();
-            file.close();
             salir = true;
         }
         else if (bufferCommand == ":w")
@@ -459,6 +457,7 @@ public:
             //y luego renderizar en esa posicion el png creado
             renderScreen();
         }
+        file.close();
         UnloadTexture(textura);
         UnloadFont(jetbrainsFont);
         clearCache();
