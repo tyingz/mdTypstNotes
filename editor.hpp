@@ -56,7 +56,14 @@ public:
     void renderCursor()
     {
         Vector2 sizeText = MeasureTextEx(jetbrainsFont, "A", FONT_SIZE, 0);
-        DrawRectangle(x_actual * sizeText.x, (y_actual-y_min)* sizeText.y, sizeText.x, sizeText.y, Fade(CURSOR_COLOR, 0.5f));
+        if (mode == MODE::Normal)
+        {
+            DrawRectangle(x_actual * sizeText.x, (y_actual-y_min)* sizeText.y, sizeText.x, sizeText.y, Fade(CURSOR_COLOR, 0.5f));
+        }
+        else if (mode == MODE::Insert)
+        {
+            DrawRectangle(x_actual * sizeText.x, (y_actual-y_min)* sizeText.y, sizeText.x/10, sizeText.y, Fade(CURSOR_COLOR, 0.5f));
+        }
     }
 
     void renderEcuaciones()
@@ -268,6 +275,15 @@ public:
             }
             mode = MODE::Insert;
         }
+        else if (letra == 'A')
+        {
+            x_actual = buffer[y_actual].size();
+            mode = MODE::Insert;
+        }
+        else if (letra == '0')
+        {
+            x_actual = x_min;
+        }
         else if (letra == ':')
         {
             mode = MODE::Command;
@@ -422,6 +438,7 @@ public:
         createCache();
 
         readFileToBuffer();
+        actualizarTexturas();
 
         SetTargetFPS(60); 
         SetExitKey(0); 
@@ -441,6 +458,7 @@ public:
                         {
                             x_actual-=1;
                         }
+                        actualizarTexturas();
                         mode=MODE::Normal;
                         letraJ=false;
                     }
