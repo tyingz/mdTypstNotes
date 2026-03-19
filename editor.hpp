@@ -256,7 +256,15 @@ public:
         {
             mode = MODE::Insert;
         }
-        if (letra == ':')
+        else if (letra == 'a')
+        {
+            if (x_actual+1<x_max)
+            {
+                x_actual+=1;
+            }
+            mode = MODE::Insert;
+        }
+        else if (letra == ':')
         {
             mode = MODE::Command;
         }
@@ -423,7 +431,7 @@ public:
                 {
                     if (letraJ == true && ESCAPE_JK_OPTION == true && letra == 'k')
                     {
-                        buffer[y_actual].pop_back();
+                        buffer[y_actual].erase(x_actual-1,1);
                         x_actual-=1;
                         mode=MODE::Normal;
                         letraJ=false;
