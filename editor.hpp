@@ -267,6 +267,17 @@ public:
         {
             mode = MODE::Insert;
         }
+        else if (letra == 'o')
+        {
+            if (y_actual>=y_max+y_min) 
+            {
+                y_min+=1;
+            }
+            y_actual+=1;
+            x_actual =x_min;
+            buffer.insert(buffer.begin() + y_actual,"");
+            mode = MODE::Insert;
+        }
         else if (letra == 'a')
         {
             if (x_actual+1<=buffer[y_actual].size())
