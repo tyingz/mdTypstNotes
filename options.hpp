@@ -3,3 +3,4 @@
 #define FONT_SIZE 40
 #define CURSOR_COLOR GREEN
 #define SET_SCROLL 4
+#define ESCAPE_JK_OPTION true

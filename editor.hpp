@@ -45,6 +45,9 @@ private:
     std::string fileName{};
     std::ifstream file{};
     bool salir{false};
+
+    bool letraJ {false};
+
 public:
     Editor(std::string file_name)
     :fileName{file_name}
@@ -189,6 +192,11 @@ public:
         {
             buffer[y_actual].push_back(letra);
             x_actual+=1;
+        }
+
+        if (ESCAPE_JK_OPTION == true && letra == 'j')
+        {
+            letraJ = true;
         }
     }
 
@@ -413,7 +421,18 @@ public:
             {
                 if (mode == MODE::Insert)
                 {
-                    handleInsertMode();
+                    if (letraJ == true && ESCAPE_JK_OPTION == true && letra == 'k')
+                    {
+                        buffer[y_actual].pop_back();
+                        x_actual-=1;
+                        mode=MODE::Normal;
+                        letraJ=false;
+                    }
+                    else
+                    {
+                        if (letraJ == true) letraJ=false;
+                        handleInsertMode();
+                    }
                 }
                 else if (mode == MODE::Normal)
                 {

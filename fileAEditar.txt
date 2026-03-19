@@ -1,9 +1,14 @@
+hola hjoa
 
 testeo
+
 $
 L = T-V
 $
 $
 frac(dif x, dif T) = 0
+$
+$
+integral_0 frac(dif x, dif t) dif t
 $
 
