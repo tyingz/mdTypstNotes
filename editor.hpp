@@ -10,7 +10,7 @@ enum MODE
 class Editor
 {
 private:
-    std::vector<std::string> buffer{""};
+    std::vector<std::string> buffer{};
     float y_min{};
     float x_min{};
 
