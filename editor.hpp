@@ -76,7 +76,14 @@ public:
                 //al final la mejor opcion al menos por ahora es renderizar un cuadrado abajo
                 DrawRectangle(x_min*FONT_SIZE,(bloque.inicioFila-y_min)*FONT_SIZE,bloque.areaEcuation.width,bloque.areaEcuation.height+FONT_SIZE,BLACK);
                 Texture2D texturaEcuacion=texturaGuardada[bloque.id];
-                DrawTexture(texturaEcuacion,x_min*FONT_SIZE,(bloque.inicioFila-y_min)*FONT_SIZE,WHITE);
+                if (CENTER_EQUATION == true)
+                {
+                    DrawTexture(texturaEcuacion,(x_max-x_min)*FONT_SIZE/2-(float)texturaEcuacion.width/2,(bloque.inicioFila-y_min)*FONT_SIZE,WHITE);
+                }
+                else
+                {
+                    DrawTexture(texturaEcuacion,x_min*FONT_SIZE,(bloque.inicioFila-y_min)*FONT_SIZE,WHITE);
+                }
             }
         }
     }

@@ -1,8 +1,13 @@
 
-hola
+hola ashe
 hola hjoahola
 jijodebuuu
 testeo
+
+$
+frac(partial x,partial t) = dot(x)
+$
+
 
 $
 L = T-V

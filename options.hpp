@@ -4,3 +4,4 @@
 #define CURSOR_COLOR GREEN
 #define SET_SCROLL 4
 #define ESCAPE_JK_OPTION true
+#define CENTER_EQUATION true
