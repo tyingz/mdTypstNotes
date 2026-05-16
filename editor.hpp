@@ -5,6 +5,8 @@ enum MODE
     Insert,
     Normal,
     Command,
+    Deletion,
+    Change,
 };
 
 class Editor
@@ -265,6 +267,66 @@ public:
         {
             x_actual+=1;
         }
+        else if (letra == 'w')
+        {
+            int largo{(int)buffer[y_actual].size()};
+            bool espacioFinded{};
+            for (int i{(int)x_actual+1};i<largo;i++)
+            {
+                if (i==largo-1)
+                {
+                    x_actual=largo-1;
+                }
+                else if (buffer[y_actual][i]==' ')
+                {
+                    espacioFinded = true;
+                }
+                else if (espacioFinded == true && buffer[y_actual][i]!=' ')
+                {
+                    x_actual = i;
+                    break;
+                }
+            }
+        }
+        else if (letra == 'b')
+        {
+            int largo{(int)buffer[y_actual].size()};
+            bool espacioFinded{};
+            for (int i{(int)x_actual-1};i>=x_min;i--)
+            {
+                if (i==x_min)
+                {
+                    x_actual=i;
+                }
+                else if (buffer[y_actual][i]==' ')
+                {
+                    espacioFinded = true;
+                }
+                else if (espacioFinded == true && buffer[y_actual][i]!=' ')
+                {
+                    x_actual = i;
+                    break;
+                }
+            }
+        }
+    }
+
+    void handleDeletion()
+    {
+        switch (letra)
+        {
+            case 'd':
+                buffer.erase(buffer.begin()+y_actual);
+                mode = MODE::Normal;
+                break;
+            case 'l':
+                buffer[y_actual].erase(x_actual,1);
+                mode = MODE::Normal;
+                break;
+            default:
+                mode = MODE::Normal;
+                break;
+        }
     }
 
     void handleNormalMode()
@@ -272,6 +334,10 @@ public:
         if (letra == 'i')
         {
             mode = MODE::Insert;
+        }
+        else if (letra == 'c')
+        {
+            mode = MODE::Change;
         }
         else if (letra == 'o')
         {
@@ -309,9 +375,17 @@ public:
         {
             handleYNavegation();
         }
-        else if (letra == 'h' || letra == 'l')
+        else if (letra == 'h' || letra == 'l' || letra == 'w' || letra == 'b')
         {
             handleXNavegation();
+        }
+        else if (letra == 'd')
+        {
+            mode = MODE::Deletion;
+        }
+        else if (letra == 'd')
+        {
+            mode = MODE::Deletion;
         }
         return;
     }
@@ -474,6 +548,40 @@ public:
         }
     }
 
+    void handleChange()
+    {
+        switch (letra)
+        {
+            case 'w':
+            {
+                mode = MODE::Insert;
+                int largo = buffer[y_actual].size();
+                for (int i{(int)x_actual};i<largo;i++)
+                {
+                    if (i==largo-1)
+                    {
+                        buffer[y_actual].erase(x_actual,largo-x_actual);
+                    }
+                    else
+                    {
+                        if (buffer[y_actual][i]==' ')
+                        {
+                            buffer[y_actual].erase(x_actual,i-x_actual);
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+            case 'l':
+                mode = MODE::Insert;
+                buffer[y_actual].erase(x_actual,1);
+            default:
+                mode = MODE::Insert;
+                break;
+        }
+    }
+
     void general()
     {
         InitWindow(WIDTH_SCREEN, HEIGHT_SCREEN, "TYM_TYP");
@@ -524,6 +632,14 @@ public:
                     {
                         break;
                     }
+                }
+                else if (mode == MODE::Deletion)
+                {
+                    handleDeletion();
+                }
+                else if (mode == MODE::Change)
+                {
+                    handleChange();
                 }
             }
 

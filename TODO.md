@@ -7,7 +7,7 @@
     //$ STRING $...
     (Hice que ahora no de un error pero aun no hice que renderize $...$
     ya que me da paja reordenar parser)
-[] agregar zoom in y zoom out
+[X] agregar zoom in y zoom out
 [] renderiza cuando estas adentro y si te equivocas laguea el tipeo
     (ya que el compiler falla) arreglar esto haciendo que no compile hasta que
     te vayas.
