@@ -10,6 +10,8 @@ enum MODE
 class Editor
 {
 private:
+    float FONT_SIZE  = 20;
+
     std::vector<std::string> buffer{};
     float y_min{};
     float x_min{};
@@ -131,7 +133,7 @@ public:
 
     void actualizarTexturas()
     {
-        bloques = read.parser(buffer,y_min,y_max,x_min,x_max);
+        bloques = read.parser(buffer,y_min,y_max,x_min,x_max,FONT_SIZE);
         for (auto &val : bloques)
         {
             std::string locationImage{};
@@ -251,9 +253,6 @@ public:
                 }
             }
         }
-
-
-
     }
 
     void handleXNavegation()
@@ -282,7 +281,7 @@ public:
             }
             y_actual+=1;
             x_actual =x_min;
-            buffer.insert(buffer.begin() + y_actual,"");
+            buffer.insert(buffer.begin() + y_actual," ");
             mode = MODE::Insert;
         }
         else if (letra == 'a')
@@ -446,6 +445,34 @@ public:
             std::logic_error("File no se pudo abrir.");
         }
     }
+    
+    void handleResizeKeys()
+    {
+        if (tecla == KEY_EQUAL)
+        {
+            FONT_SIZE+=2;
+        }
+        else if (tecla == KEY_MINUS)
+        {
+            FONT_SIZE-=2;
+        }
+        y_max= HEIGHT_SCREEN/FONT_SIZE-1-2;
+        x_max= WIDTH_SCREEN/FONT_SIZE;
+        jetbrainsFont = LoadFontEx("resources/JetBrainsMono-Medium.ttf", FONT_SIZE , NULL, 0);
+        SetTextureFilter(jetbrainsFont.texture, TEXTURE_FILTER_BILINEAR);
+        bloques.clear();
+        clearCache();
+        actualizarTexturas();
+    }
+
+    void handleCtrlKeys()
+    {
+        tecla = GetKeyPressed();
+        if (tecla == KEY_MINUS || tecla == KEY_EQUAL)
+        {
+            handleResizeKeys();
+        }
+    }
 
     void general()
     {
@@ -500,6 +527,11 @@ public:
                 }
             }
 
+            if (IsKeyDown(KEY_LEFT_CONTROL))
+            {
+                handleCtrlKeys();
+            }
+
             tecla = GetKeyPressed();
             if (tecla>0)
             {
@@ -524,6 +556,15 @@ public:
                     // handleCommandMode();
                 }
             }
+
+
+                // tecla = GetKeyPressed();
+                // if (tecla == KEY_KP_ADD || tecla == KEY_EQUAL)
+                // {
+                //     handleResizeKeys();
+                // }
+
+
             //parsear la screen hasta encontrar $$ y ahi quitar esa linea y compilar
             //y luego renderizar en esa posicion el png creado
             renderScreen();

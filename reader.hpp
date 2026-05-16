@@ -29,7 +29,7 @@ private:
     std::string configsTypstTopFile{"#set page(width: auto, height: auto, margin: 5pt)\n#show math.equation.where(block: true): align.with(left)\n#set page(fill: black)\n#set text(fill: white)\n"};
 public:
     std::vector<TypstBlock> parser(const std::vector<std::string> &buffer,size_t y_min,
-            size_t y_max, size_t x_min, size_t x_max)
+            size_t y_max, size_t x_min, size_t x_max, float FONT_SIZE)
     {
         std::vector<TypstBlock> vectorTypstBlock{};
         size_t tempInicio{};
