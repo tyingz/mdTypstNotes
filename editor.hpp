@@ -335,10 +335,6 @@ public:
         {
             mode = MODE::Insert;
         }
-        else if (letra == 'c')
-        {
-            mode = MODE::Change;
-        }
         else if (letra == 'o')
         {
             if (y_actual>=y_max+y_min) 
@@ -383,9 +379,9 @@ public:
         {
             mode = MODE::Deletion;
         }
-        else if (letra == 'd')
+        else if (letra == 'c')
         {
-            mode = MODE::Deletion;
+            mode = MODE::Change;
         }
         return;
     }
