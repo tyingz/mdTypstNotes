@@ -290,22 +290,34 @@ public:
         }
         else if (letra == 'b')
         {
-            int largo{(int)buffer[y_actual].size()};
             bool espacioFinded{};
             for (int i{(int)x_actual-1};i>=x_min;i--)
             {
-                if (i==x_min)
-                {
-                    x_actual=i;
-                }
-                else if (buffer[y_actual][i]==' ')
+                if (buffer[y_actual][i]==' ' && espacioFinded == false)
                 {
                     espacioFinded = true;
                 }
-                else if (espacioFinded == true && buffer[y_actual][i]!=' ')
+                else if (buffer[y_actual][i]!=' ' && espacioFinded == true)
                 {
-                    x_actual = i;
-                    break;
+                    bool finded{};
+                    for (int t{i};t>=x_min;t--)
+                    {
+                        if (buffer[y_actual][t]==' ')
+                        {
+                            x_actual = t+1;
+                            finded = true;
+                            break;
+                        }
+                    }
+                    if (finded == true)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        x_actual = x_min;
+                        break;
+                    }
                 }
             }
         }

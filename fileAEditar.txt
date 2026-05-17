@@ -1,7 +1,7 @@
 
 hass  sja jsdgasgsad
 jajaa
-jijod
+jijod jaja
 testeo
  
 $
@@ -13,6 +13,7 @@ $
 L = T-V
 $
 Querida 
+ojo 
 $
 x+1 
 $ 
