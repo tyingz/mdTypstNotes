@@ -240,6 +240,45 @@ public:
                 y_min-=1;
             }
         }
+        // ARREGLAR ESTO:
+        // ARREGLAR ESTO:
+        // ARREGLAR ESTO:
+        // ARREGLAR ESTO:
+        // ARREGLAR ESTO:
+        // else if (letra == '}')
+        // {
+        //     for (int i{(int)y_actual+1};i<buffer.size();i++)
+        //     {
+        //         if (buffer[i]==" ")
+        //         {
+        //             if (i>y_max)
+        //             {
+        //                 y_min+=(i-y_actual);
+        //             }
+        //             y_actual = i;
+        //             break;
+        //         }
+        //     }
+        // }
+        // else if (letra == '{')
+        // {
+        //     for (int i{(int)y_actual-1};i>=y_min;i--)
+        //     {
+        //         if (buffer[i]==" ")
+        //         {
+        //             if (i<y_min)
+        //             {
+        //                 y_min-=(y_actual-i);
+        //             }
+        //             y_actual = i;
+        //             break;
+        //         }
+        //     }
+        // }
+
+
+
+
         if (buffer[y_actual].empty())
         {
             x_actual=x_min;
@@ -379,7 +418,7 @@ public:
         {
             mode = MODE::Command;
         }
-        else if (letra == 'j' || letra == 'k')
+        else if (letra == 'j' || letra == 'k' || letra == '}' || letra == '{')
         {
             handleYNavegation();
         }

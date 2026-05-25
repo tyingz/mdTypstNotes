@@ -3,11 +3,11 @@ hass  sja jsdgasgsad
 jajaa
 jijod jaja
 testeo
- 
+jeje 
 $
 frac(partial x,partial t) = dot(x)
 $
-gad
+gad pareceria estar ok esto
 asdga
 $
 L = T-V
@@ -27,8 +27,12 @@ $
 ajjaja
 $
 integral_0 frac(dif x, dif t) dif t
- 
 $
+ 
+quizas deberia hacer algo para que se quede
+renderizada arriba las imagenes asi no dan problemas
+de compilacion randoms.  
+xD 
 la 
  asi voy
 Jodete
