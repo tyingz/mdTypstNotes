@@ -7,11 +7,21 @@
     //$ STRING $...
     (Hice que ahora no de un error pero aun no hice que renderize $...$
     ya que me da paja reordenar parser)
+
 [X] agregar zoom in y zoom out
+
 [] renderiza cuando estas adentro y si te equivocas laguea el tipeo
     (ya que el compiler falla) arreglar esto haciendo que no compile hasta que
-    te vayas.
-[] agregar dd visual mode y todo eso
+    te vayas. Tambien agregar que las imagenes sigan renderizadas
+    cuando estas en insert mode o hacerlo una opcion porque si queres
+    copiar una ec de arriba o leerla no podes leerla bien. Aparte
+    como esta renderizando el currBuffer cuando se encuentra arriba un
+    $$ lo que hace es que tira error ya que no detecta que deberia estar
+    una imagen. Cambiar para que renderize perma o dependiente de la posicion
+    en el buffer.
+
+[X] agregar dd visual mode y todo eso
+
 [] agregar snippets como dm y esas cosas o un motor para que
     cada uno se haga el snippet que quiera 
     (la segunda opcion me gusta un poco mas)
