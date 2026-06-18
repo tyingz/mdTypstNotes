@@ -571,11 +571,11 @@ public:
     {
         if (tecla == KEY_EQUAL)
         {
-            FONT_SIZE+=2;
+            FONT_SIZE+=5;
         }
         else if (tecla == KEY_MINUS)
         {
-            FONT_SIZE-=2;
+            FONT_SIZE-=5;
         }
         y_max= HEIGHT_SCREEN/FONT_SIZE-1-2;
         x_max= WIDTH_SCREEN/FONT_SIZE;

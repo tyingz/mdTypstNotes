@@ -7,6 +7,10 @@ jeje
 $
 frac(partial x,partial t) = dot(x)
 $
+XD 
+$
+frac(x,y) = x/y 
+$ 
 gad pareceria estar ok esto
 asdga
 $

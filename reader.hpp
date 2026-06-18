@@ -81,7 +81,13 @@ public:
 
                     command.append(" ");
                     command.append(locationImage);
+
+                    // command.append(" --ppi 400");
                     command.append(" --ppi 300");
+                    // aca toquetear segun el size
+                    // aca toquetear segun el size
+                    // aca toquetear segun el size
+                    // aca toquetear segun el size
 
                     if (!fs::exists(locationImage))
                     {
